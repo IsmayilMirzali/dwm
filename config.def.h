@@ -9,14 +9,14 @@ static const unsigned int gappoh    = 10;       /* horiz outer gap between windo
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=14", "JoyPixels:pixelsize=16" };
-static const char dmenufont[]       = "monospace:size=12";
+static const char dmenufont[]       = "monospace:size=14";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static const char col_cyan[]        = "#0c705b";
 static const unsigned int baralpha = 0xa0;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
@@ -64,7 +64,7 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/zsh", "-c", cmd, NULL } }
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
@@ -124,13 +124,14 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-
-	{ 0, 				XF86XK_AudioMute, 		spawn, 		SHCMD("amixer set Master toggle; pkill -RTMIN+30 dwmblocks") },
-	{ 0, 				XF86XK_AudioLowerVolume, 	spawn, 		SHCMD("amixer set Master 3%-; pkill -RTMIN+30 dwmblocks") },
-	{ 0, 				XF86XK_AudioRaiseVolume, 	spawn, 		SHCMD("amixer set Master 3%+; pkill -RTMIN+30 dwmblocks") },
-	/* { 0, 				XF86XK_AudioMicMute, spawn, SHCMD("4") }, */
+    { MODKEY|Mod4Mask,              XK_Return, spawn,           SHCMD("slock /usr/bin/xset dpms force suspend") },
+	{ 0, 				XF86XK_AudioMute, 		    spawn, 		SHCMD("pamixer --sink 3 -t; pkill -RTMIN+30 dwmblocks") },
+	{ 0, 				XF86XK_AudioLowerVolume, 	spawn, 		SHCMD("pamixer --sink 3 -d 3; pkill -RTMIN+30 dwmblocks") },
+	{ 0, 				XF86XK_AudioRaiseVolume, 	spawn, 		SHCMD("pamixer --sink 3 -i 3; pkill -RTMIN+30 dwmblocks") },
+	{ 0, 				XF86XK_AudioMicMute,        spawn,      SHCMD("pamixer --source 5 -t") },
 	{ 0, 				XF86XK_MonBrightnessDown, 	spawn, 		SHCMD("brightnessctl s 5%-; pkill -RTMIN+31 dwmblocks") },
 	{ 0, 				XF86XK_MonBrightnessUp, 	spawn, 		SHCMD("brightnessctl s 5%+; pkill -RTMIN+31 dwmblocks") },
+    { 0,                XF86XK_Display,             spawn,      SHCMD("projector") },
 };
 
 /* button definitions */
